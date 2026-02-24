@@ -14,7 +14,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@GetMapping("/test")
+public String test(){
+ return "working";
+}
 @RestController
 @RequestMapping
 public class AuthController {
