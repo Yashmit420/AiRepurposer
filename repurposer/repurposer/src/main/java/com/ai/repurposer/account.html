@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="backend-url" content="">
+    <title>Account | AI Repurposer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-0: #070e1a;
+            --bg-1: #0b1729;
+            --ink: #f7f9ff;
+            --muted: #afbdd6;
+            --line: rgba(255, 255, 255, 0.14);
+            --glass: rgba(255, 255, 255, 0.06);
+            --aqua: #66f1df;
+            --gold: #ffd08a;
+            --blue: #84b8ff;
+            --danger: #ff718f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Plus Jakarta Sans", sans-serif
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(1000px 620px at 8% -14%, #1c3155 0%, transparent 65%),
+                radial-gradient(900px 600px at 98% 16%, #214164 0%, transparent 60%),
+                linear-gradient(140deg, var(--bg-0), var(--bg-1) 52%, #091323);
+            color: var(--ink);
+            overflow-x: hidden
+        }
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: .28;
+            z-index: -1
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 28px 20px
+        }
+
+        .logo {
+            font-family: Syne, sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: .05em;
+            background: linear-gradient(100deg, #fff, var(--aqua), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .back {
+            text-decoration: none;
+            color: #d8e8ff;
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .wrap {
+            max-width: 1120px;
+            margin: 10px auto 40px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 16px
+        }
+
+        .panel {
+            border: 1px solid var(--line);
+            background: linear-gradient(170deg, rgba(255, 255, 255, .1), var(--glass));
+            border-radius: 20px;
+            padding: 26px
+        }
+
+        h1 {
+            font-family: Syne, sans-serif;
+            font-size: clamp(30px, 5vw, 48px);
+            line-height: 1.1;
+            background: linear-gradient(100deg, #fff, #cae1ff, #9cfced);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .sub {
+            margin-top: 10px;
+            color: var(--muted)
+        }
+
+        .grid {
+            margin-top: 22px;
+            display: grid;
+            gap: 14px
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cfe0ff;
+            font-size: 13px
+        }
+
+        .field input {
+            width: 100%;
+            background: rgba(8, 15, 25, .9);
+            border: 1px solid rgba(255, 255, 255, .16);
+            border-radius: 12px;
+            color: #eef5ff;
+            padding: 12px 14px
+        }
+
+        .field input[disabled] {
+            opacity: .82;
+            cursor: not-allowed
+        }
+
+        .status {
+            margin-top: 10px;
+            color: #a9bedf;
+            min-height: 20px;
+            font-size: 14px
+        }
+
+        .plan-pill {
+            margin-top: 18px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase
+        }
+
+        .plan-pill.premium {
+            background: linear-gradient(120deg, #67f3dc, #8db8ff 52%, #f7c985);
+            color: #091222;
+            font-weight: 700
+        }
+
+        .plan-pill.advanced {
+            background: linear-gradient(120deg, #ffd08a, #ffb4e1 52%, #9ad7ff);
+            color: #1a1026;
+            font-weight: 700
+        }
+
+        .plan-pill.free {
+            background: rgba(255, 255, 255, .06);
+            color: #d9e8ff
+        }
+
+        .actions {
+            margin-top: 16px;
+            display: grid;
+            gap: 12px
+        }
+
+        .btn {
+            border: 1px solid rgba(255, 255, 255, .24);
+            border-radius: 14px;
+            padding: 12px 14px;
+            text-decoration: none;
+            color: #eaf2ff;
+            background: linear-gradient(180deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .04));
+            cursor: pointer;
+            text-align: center;
+            transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(132, 184, 255, .65);
+            box-shadow: 0 12px 28px rgba(27, 53, 84, .34)
+        }
+
+        .btn.primary {
+            background: linear-gradient(120deg, #67f3dc, #8db8ff 52%, #f7c985);
+            color: #091222;
+            font-weight: 700;
+            box-shadow: 0 12px 30px rgba(89, 156, 244, .28)
+        }
+
+        .btn.warn {
+            background: linear-gradient(120deg, rgba(255, 113, 143, .24), rgba(255, 165, 84, .24));
+            border-color: rgba(255, 113, 143, .5);
+            color: #ffdce3
+        }
+
+        @media (max-width: 860px) {
+            .wrap {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg"></div>
+    <nav>
+        <div class="logo">AI Repurposer</div>
+        <a class="back" href="index.html">Back Home</a>
+    </nav>
+
+    <main class="wrap">
+        <section class="panel">
+            <h1>Your Account</h1>
+            <p class="sub">Manage profile details and membership status from one place.</p>
+            <div id="planPill" class="plan-pill free">Free Plan</div>
+            <div class="grid">
+                <div class="field">
+                    <label>Email</label>
+                    <input id="email" type="email" disabled>
+                </div>
+                <div class="field">
+                    <label>New Password (optional)</label>
+                    <input id="password" type="password" placeholder="Leave blank to keep current password" disabled>
+                </div>
+                <div class="field">
+                    <label>Confirm Password</label>
+                    <input id="password2" type="password" placeholder="Repeat password" disabled>
+                </div>
+            </div>
+            <div class="status" id="status"></div>
+        </section>
+
+        <aside class="panel">
+            <h3>Actions</h3>
+            <div class="actions">
+                <button id="editBtn" class="btn">Edit Profile</button>
+                <button id="saveBtn" class="btn primary" style="display:none;">Save Changes</button>
+                <button id="cancelBtn" class="btn" style="display:none;">Cancel</button>
+                <a id="upgradeBtn" class="btn primary" href="subscription.html">Upgrade</a>
+                <button id="logoutBtn" class="btn">Logout</button>
+                <button id="deleteBtn" class="btn warn">Delete Account</button>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        const state = { email: "", plan: "free", editMode: false }
+        const API_BASE = (() => {
+            const meta = document.querySelector('meta[name="backend-url"]')?.content?.trim()
+            const win = window.BACKEND_URL
+            if (win) return win.replace(/\/+$/, "")
+            if (meta) return meta.replace(/\/+$/, "")
+            if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") return "http://localhost:8080"
+            return ""
+        })()
+
+        function apiUrl(path) {
+            return API_BASE ? `${API_BASE}${path}` : path
+        }
+
+        function authHeaders(extra = {}) {
+            const token = localStorage.getItem("token")
+            const headers = { ...extra }
+            if (token) headers["X-Auth-Token"] = token
+            return headers
+        }
+
+        function setStatus(text) {
+            document.getElementById("status").textContent = text || ""
+        }
+
+        function setEditMode(enabled) {
+            state.editMode = enabled
+            document.getElementById("email").disabled = !enabled
+            document.getElementById("password").disabled = !enabled
+            document.getElementById("password2").disabled = !enabled
+            document.getElementById("editBtn").style.display = enabled ? "none" : "block"
+            document.getElementById("saveBtn").style.display = enabled ? "block" : "none"
+            document.getElementById("cancelBtn").style.display = enabled ? "block" : "none"
+        }
+
+        async function loadAccount() {
+            const token = localStorage.getItem("token")
+            if (!token) {
+                window.location.href = "login.html"
+                return
+            }
+
+            try {
+                const res = await fetch(apiUrl("/account?email=" + encodeURIComponent(token)), {
+                    headers: authHeaders()
+                })
+                const data = await res.json()
+                state.email = data.email || token
+                state.plan = (data.plan || "free").toLowerCase()
+                document.getElementById("email").value = state.email
+                document.getElementById("password").value = ""
+                document.getElementById("password2").value = ""
+
+                const pill = document.getElementById("planPill")
+                if (state.plan === "advanced") {
+                    pill.className = "plan-pill advanced"
+                    pill.textContent = "Advanced Plan 🏆"
+                } else if (state.plan === "pro" || state.plan === "premium") {
+                    pill.className = "plan-pill premium"
+                    pill.textContent = "Pro Plan 🎉"
+                } else {
+                    pill.className = "plan-pill free"
+                    pill.textContent = "Free Plan"
+                }
+
+                const upgradeBtn = document.getElementById("upgradeBtn")
+                if (upgradeBtn) {
+                    upgradeBtn.style.display = state.plan === "advanced" ? "none" : "block"
+                }
+            } catch (e) {
+                setStatus("Could not load account details.")
+            }
+        }
+
+        async function saveAccount() {
+            const newEmail = document.getElementById("email").value.trim()
+            const password = document.getElementById("password").value
+            const password2 = document.getElementById("password2").value
+
+            if (!newEmail) {
+                setStatus("Email cannot be empty.")
+                return
+            }
+            if (password && password !== password2) {
+                setStatus("Passwords do not match.")
+                return
+            }
+
+            try {
+                const res = await fetch(apiUrl("/account/update"), {
+                    method: "POST",
+                    headers: authHeaders({ "Content-Type": "application/json" }),
+                    body: JSON.stringify({
+                        email: state.email,
+                        newEmail,
+                        password
+                    })
+                })
+                const msg = await res.text()
+                setStatus(msg)
+
+                if (msg === "Account updated") {
+                    state.email = newEmail
+                    localStorage.setItem("token", newEmail)
+                    setEditMode(false)
+                    document.getElementById("password").value = ""
+                    document.getElementById("password2").value = ""
+                }
+            } catch (e) {
+                setStatus("Update failed.")
+            }
+        }
+
+        async function deleteAccount() {
+            if (!confirm("Delete your account permanently?")) return
+
+            const email = localStorage.getItem("token")
+            if (!email) return
+
+            try {
+                await fetch(apiUrl("/account/delete?email=" + encodeURIComponent(email)), {
+                    method: "POST",
+                    headers: authHeaders()
+                })
+            } catch (e) { }
+
+            localStorage.removeItem("token")
+            window.location.href = "signup.html"
+        }
+
+        document.getElementById("editBtn").addEventListener("click", () => {
+            setStatus("")
+            setEditMode(true)
+        })
+        document.getElementById("cancelBtn").addEventListener("click", () => {
+            setEditMode(false)
+            document.getElementById("email").value = state.email
+            document.getElementById("password").value = ""
+            document.getElementById("password2").value = ""
+            setStatus("")
+        })
+        document.getElementById("saveBtn").addEventListener("click", saveAccount)
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            const email = localStorage.getItem("token")
+            try {
+                if (email) {
+                    await fetch(apiUrl("/logout?email=" + encodeURIComponent(email)), {
+                        method: "POST",
+                        headers: authHeaders()
+                    })
+                }
+            } catch (e) { }
+            localStorage.removeItem("token")
+            window.location.href = "login.html"
+        })
+        document.getElementById("deleteBtn").addEventListener("click", deleteAccount)
+
+        loadAccount()
+    </script>
+</body>
+
+</html>

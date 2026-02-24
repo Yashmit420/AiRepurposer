@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="backend-url" content="">
+    <title>Subscription</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Plus Jakarta Sans", sans-serif
+        }
+
+        body {
+            background: #060606;
+            color: #fff
+        }
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 20% 30%, #7b2cff33, transparent 50%), radial-gradient(circle at 80% 70%, #ff3cf733, transparent 50%), #060606;
+            z-index: -1
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 60px 20px;
+            text-align: center
+        }
+
+        h1 {
+            font-family: Syne;
+            font-size: 48px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, #7b2cff, #ff3cf7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 50px
+        }
+
+        .toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 10px
+        }
+
+        .toggle button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 12px;
+            background: #0d0d0d;
+            color: #fff;
+            cursor: pointer;
+            transition: .25s
+        }
+
+        .toggle button.active {
+            background: linear-gradient(90deg, #7b2cff, #ff3cf7)
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 20px;
+            position: relative;
+            transition: .3s
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 50px #7b2cff33
+        }
+
+        .price-wrap {
+            margin: 10px 0 12px
+        }
+
+        .price {
+            font-size: 36px;
+            margin: 10px 0;
+            font-family: Syne
+        }
+
+        .old-price {
+            color: #8f8f8f;
+            text-decoration: line-through;
+            font-size: 14px;
+            margin-left: 8px
+        }
+
+        .cycle {
+            color: #b4b4b4;
+            font-size: 13px;
+            margin-top: 4px
+        }
+
+        .save-tag {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            background: #1f1433;
+            color: #d6b8ff;
+            border: 1px solid #7b2cff55
+        }
+
+        .feature {
+            color: #aaa;
+            margin: 6px 0
+        }
+
+        .highlight {
+            box-shadow: 0 0 50px #7b2cff55;
+            transform: scale(1.05)
+        }
+
+        button.cta {
+            margin-top: 20px;
+            padding: 12px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #7b2cff, #ff3cf7);
+            color: #fff;
+            cursor: pointer;
+            width: 100%
+        }
+
+        .badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #7b2cff;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 12px
+        }
+
+        .badge.current-tag {
+            top: 18px;
+            left: auto;
+            right: 18px;
+            transform: none;
+            background: linear-gradient(120deg, #67f3dc, #8db8ff 52%, #f7c985);
+            color: #091222;
+            font-weight: 700;
+            display: none
+        }
+
+        .card.current-plan {
+            border: 1px solid transparent;
+            background:
+                linear-gradient(rgba(15, 16, 31, .94), rgba(15, 16, 31, .94)) padding-box,
+                linear-gradient(120deg, #67f3dc, #8db8ff, #f7c985) border-box;
+            box-shadow: 0 0 44px rgba(141, 184, 255, .28);
+            transform: translateY(-2px)
+        }
+
+        .card.upgrade-focus {
+            border: 1px solid rgba(255, 208, 138, .55);
+            box-shadow: 0 0 48px rgba(255, 208, 138, .22), 0 0 24px rgba(132, 184, 255, .22)
+        }
+
+        button.cta.disabled {
+            cursor: not-allowed;
+            opacity: .48;
+            filter: grayscale(.22)
+        }
+
+        .trust {
+            margin-top: 60px;
+            color: #aaa
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg"></div>
+
+    <div class="container">
+        <h1>Simple Transparent Pricing</h1>
+        <p class="subtitle">Start free. Upgrade when you scale.</p>
+
+        <div class="toggle">
+            <button id="monthlyTab" class="active" onclick="switchPlan('monthly')">Monthly</button>
+            <button id="yearlyTab" onclick="switchPlan('yearly')">Yearly</button>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Free</h3>
+                <div class="price-wrap">
+                    <div class="price" data-plan="free">&#8377;0</div>
+                    <div class="cycle">Always free</div>
+                </div>
+                <p class="feature">3 generations/day</p>
+                <p class="feature">Basic features</p>
+                <p class="feature">Limited AI power</p>
+                <a href="#"><button class="cta">Start Free</button></a>
+            </div>
+
+            <div class="card highlight" id="proCard">
+                <div class="badge">Founder</div>
+                <div class="badge current-tag" id="proCurrentTag">Current Plan</div>
+                <h3>Pro</h3>
+                <div class="price-wrap">
+                    <div class="price" data-plan="pro">&#8377;73</div>
+                    <div class="cycle" id="proCycle">/month</div>
+                    <div class="save-tag" id="proSave">Save up to 27%</div>
+                </div>
+                <p class="feature">Unlimited generation</p>
+                <p class="feature">All AI features</p>
+                <p class="feature">Priority speed</p>
+                <p class="feature">Future features included</p>
+                <a id="proPurchaseLink" href="https://repurposerai.gumroad.com/l/iijrc">
+                    <button class="cta" id="proPurchaseBtn">Upgrade</button>
+                </a>
+            </div>
+
+            <div class="card" id="advancedCard">
+                <div class="badge current-tag" id="advancedCurrentTag">Current Plan</div>
+                <h3>Advanced</h3>
+                <div class="price-wrap">
+                    <div class="price" data-plan="agency">&#8377;149</div>
+                    <div class="cycle" id="agencyCycle">/month</div>
+                    <div class="save-tag" id="agencySave">Save up to 25%</div>
+                </div>
+                <p class="feature">Team workspace</p>
+                <p class="feature">Advanced AI models</p>
+                <p class="feature">Analytics</p>
+                <a id="agencyPurchaseLink" href="https://repurposerai.gumroad.com/l/napifv" target="_blank">
+                    <button class="cta" id="advancedPurchaseBtn">Upgrade</button>
+                </a>
+            </div>
+        </div>
+
+        <p class="trust">Secure payments • Cancel anytime • Founder pricing locked</p>
+    </div>
+
+    <script>
+        const API_BASE = (() => {
+            const meta = document.querySelector('meta[name="backend-url"]')?.content?.trim()
+            const win = window.BACKEND_URL
+            if (win) return win.replace(/\/+$/, "")
+            if (meta) return meta.replace(/\/+$/, "")
+            if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") return "http://localhost:8080"
+            return ""
+        })()
+
+        function apiUrl(path) {
+            return API_BASE ? `${API_BASE}${path}` : path
+        }
+
+        function authHeaders(extra = {}) {
+            const token = localStorage.getItem("token")
+            const headers = { ...extra }
+            if (token) headers["X-Auth-Token"] = token
+            return headers
+        }
+
+        const pricing = {
+            monthly: {
+                pro: { now: "₹73", old: "₹99", cycle: "/month", save: "Save up to 27%" },
+                agency: { now: "₹149", old: "₹199", cycle: "/month", save: "Save up to 25%" }
+            },
+            yearly: {
+                pro: { now: "₹730", old: "₹1188", cycle: "/year", save: "Save up to 39%" },
+                agency: { now: "₹1490", old: "₹2388", cycle: "/year", save: "Save up to 38%" }
+            }
+        }
+
+        function updatePriceNode(planKey, values) {
+            const node = document.querySelector(`[data-plan="${planKey}"]`)
+            if (!node) return
+
+            const oldNode = node.querySelector(".old-price")
+            if (oldNode) oldNode.remove()
+
+            node.textContent = values.now
+            const old = document.createElement("span")
+            old.className = "old-price"
+            old.textContent = values.old
+            node.appendChild(old)
+        }
+
+        function switchPlan(mode) {
+            const isYearly = mode === "yearly"
+            document.getElementById("monthlyTab").classList.toggle("active", !isYearly)
+            document.getElementById("yearlyTab").classList.toggle("active", isYearly)
+
+            const data = pricing[mode]
+            updatePriceNode("pro", data.pro)
+            updatePriceNode("agency", data.agency)
+            document.getElementById("proCycle").textContent = data.pro.cycle
+            document.getElementById("agencyCycle").textContent = data.agency.cycle
+            document.getElementById("proSave").textContent = data.pro.save
+            document.getElementById("agencySave").textContent = data.agency.save
+        }
+
+        switchPlan("monthly")
+
+        async function applyPlanState() {
+            const email = localStorage.getItem("token")
+            if (!email) return
+
+            try {
+                const res = await fetch(apiUrl("/plan?email=" + encodeURIComponent(email)), {
+                    headers: authHeaders()
+                })
+                const plan = (await res.text()).trim().toLowerCase()
+                const proCard = document.getElementById("proCard")
+                const proTag = document.getElementById("proCurrentTag")
+                const proBtn = document.getElementById("proPurchaseBtn")
+                const proLink = document.getElementById("proPurchaseLink")
+                const advancedCard = document.getElementById("advancedCard")
+                const advancedTag = document.getElementById("advancedCurrentTag")
+                const advancedBtn = document.getElementById("advancedPurchaseBtn")
+                const advancedLink = document.getElementById("agencyPurchaseLink")
+
+                if (plan === "advanced") {
+                    if (advancedCard) advancedCard.classList.add("current-plan")
+                    if (advancedTag) advancedTag.style.display = "inline-block"
+                    if (advancedBtn) {
+                        advancedBtn.classList.add("disabled")
+                        advancedBtn.textContent = "Current Plan"
+                        advancedBtn.disabled = true
+                    }
+                    if (advancedLink) {
+                        advancedLink.href = "#"
+                        advancedLink.style.pointerEvents = "none"
+                    }
+                } else if (plan === "pro" || plan === "premium") {
+                    if (proCard) proCard.classList.add("current-plan")
+                    if (proTag) proTag.style.display = "inline-block"
+                    if (advancedCard) advancedCard.classList.add("upgrade-focus")
+                    if (proBtn) {
+                        proBtn.classList.add("disabled")
+                        proBtn.textContent = "Current Plan"
+                        proBtn.disabled = true
+                    }
+                    if (proLink) {
+                        proLink.href = "#"
+                        proLink.style.pointerEvents = "none"
+                    }
+                }
+            } catch (e) { }
+        }
+
+        async function markUserUpgraded(planType) {
+            const email = localStorage.getItem("token");
+            if (!email) return
+            try {
+                await fetch(apiUrl("/upgrade?email=" + encodeURIComponent(email) + "&plan=" + encodeURIComponent(planType)), {
+                 method:"POST",
+                 headers: authHeaders()
+                })
+            } catch (e) { }
+        }
+
+        async function handleUpgradeClick(event, anchorId) {
+            event.preventDefault()
+            const anchor = document.getElementById(anchorId)
+            if (!anchor) return
+            const url = anchor.href
+            const target = anchor.target
+            const planType = anchorId === "agencyPurchaseLink" ? "advanced" : "pro"
+
+            await markUserUpgraded(planType)
+
+            if (target === "_blank") {
+                window.open(url, "_blank")
+            } else {
+                window.location.href = url
+            }
+        }
+
+        document.getElementById("proPurchaseLink").addEventListener("click", (event) => handleUpgradeClick(event, "proPurchaseLink"))
+        document.getElementById("agencyPurchaseLink").addEventListener("click", (event) => handleUpgradeClick(event, "agencyPurchaseLink"))
+        applyPlanState()
+    </script>
+</body>
+
+</html>
