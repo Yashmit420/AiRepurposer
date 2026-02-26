@@ -77,13 +77,26 @@ public class AIController {
         }
 
         String prompt =
-            "Break the following idea or video into multiple short-form videos.\n" +
-                "For each video provide:\n" +
-                "Video number\n" +
-                "Timestamp\n" +
-                "Caption\n" +
-                "3 Tweets\n" +
-                "Description with hashtags\n\n" +
+            "You are an expert short-form content strategist.
+
+Goal:
+If user gives an IDEA, expand it and create 4 short videos.
+If user gives a YouTube URL, assume it is a long video and repurpose it into 4 best short videos based on the most valuable moments.
+
+Important rules:
+1. Output exactly 4 sections only: Video 1, Video 2, Video 3, Video 4.
+2. For each section include:
+   - Duration (recommended short length, e.g. 00:30 to 00:45)
+   - Best Part / Hook (what moment to use and why)
+   - Caption (1 strong line)
+   - Description (platform-ready, clear CTA)
+   - Tips (2-4 practical tips for editing/posting)
+3. Keep language simple, engaging, and creator-friendly.
+4. No extra intro/outro text outside the 4 sections.
+5. If input is an IDEA (not URL), first infer a logical long-form structure, then split into 4 strongest short-video angles.
+6. If input is a URL and no transcript/content is available, still produce high-quality inferred output and clearly label inferred assumptions inside each section in one short line.
+
+User input:" +
                 input;
 
         try {
